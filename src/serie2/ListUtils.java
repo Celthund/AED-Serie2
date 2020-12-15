@@ -107,7 +107,6 @@ public class ListUtils {
                 if (lists[smallestIdx] == null || cmp.compare(lists[smallestIdx].value, lists[i].value) > 0)
                     smallestIdx = i;
             }
-
             i++;
         }
 
