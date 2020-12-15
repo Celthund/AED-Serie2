@@ -66,22 +66,22 @@ public class QuickSortTest {
 		array.add(33);
 		array.add(27);
 		array.add(26);
-		array.add(-33);
+		/*array.add(-33);
 		array.add(14);
 		array.add(26);
 		array.add(8);
 		array.add(9);
-		array.add(-19);
+		array.add(-19);*/
 		Node<Integer> list = ListUtilTest.getListWithoutSentinel(array);
-		Node<Integer> last = ListUtilTest.getNNode(10, list);
+		Node<Integer> last = ListUtilTest.getNNode(4, list);
 		quicksort(list, last, CMP_NATURAL_ORDER);
 		assertTrue(isSorted(list, last, CMP_NATURAL_ORDER));
 	}
 
 	@Test
 	public void quicksort_with_randomElements_list() {
-		Node<Integer> list = getRandomListWithoutSentinel(11);
-		Node<Integer> last = ListUtilTest.getNNode(10, list);
+		Node<Integer> list = getRandomListWithoutSentinel(5);
+		Node<Integer> last = ListUtilTest.getNNode(4, list);
 		quicksort(list, last, CMP_NATURAL_ORDER);
 		assertTrue(isSorted(list, last, CMP_NATURAL_ORDER));
 	}
