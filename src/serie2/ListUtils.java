@@ -87,16 +87,19 @@ public class ListUtils {
                 i = 0;
 
                 Node <E> tmp = lists[smallestIdx];
-                lists[smallestIdx] = (lists[smallestIdx].next == null) ? null : lists[smallestIdx].next;
 
-                if(tmp.next != null)
-                    tmp.next.previous = tmp.previous;
+                if(tmp != null) {
+                    lists[smallestIdx] = (lists[smallestIdx].next == null) ? null : lists[smallestIdx].next;
 
-                res.previous = tmp;
-                tmp.next = res;
-                tmp.previous = last;
-                last.next = tmp;
-                last = tmp;
+                    if (tmp.next != null)
+                        tmp.next.previous = tmp.previous;
+
+                    res.previous = tmp;
+                    tmp.next = res;
+                    tmp.previous = last;
+                    last.next = tmp;
+                    last = tmp;
+                }
             }
 
             if (lists[i] == null)
