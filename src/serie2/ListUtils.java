@@ -20,7 +20,72 @@ public class ListUtils {
         val1.next = list1;
     }
 
-    public static <E> void quicksort(Node<E> first, Node<E> last, Comparator<E> cmp) {
+    public static <E> void quicksort_with_pointers(Node<E> first, Node<E> last, Comparator<E> cmp) {
+          if (first == null || last == null || first == last) return;
+          Node<E> pivot = last, curr = first, tmp;
+          while (curr != pivot) {
+              if (cmp.compare(curr.value, pivot.value) > 0){
+                  tmp = curr.next;
+                  if (first == curr)
+                      first = first.next;
+                  curr.next.previous = curr.previous;
+                  if (curr.previous != null)
+                    curr.previous.next = curr.next;
+                  curr.next = last.next;
+                  curr.previous = last;
+                  last.next = curr;
+                  last = curr;
+                  curr = tmp;
+              } else
+                curr = curr.next;
+          }
+          if (first != pivot && first.next != pivot)
+              quicksort_with_pointers(first, pivot.previous, cmp);
+          if (last != pivot && last.previous != pivot)
+            quicksort_with_pointers(pivot.next, last, cmp);
+    }
+
+    public static <E> void quicksort(Node<E> first, Node<E> last, Comparator<E> cmp){
+        String a = "AB";
+        String b = "BA";
+        if (first == last.next || first == last) return;
+        Node<E> pivot, new_first, new_last, curr = first, tmp;
+        pivot = new_first = new_last = new Node<>();
+        pivot.value = last.value;
+        pivot.next = pivot;
+        pivot.previous = pivot;
+        while (curr != last){
+            tmp = new Node<>();
+            tmp.value = curr.value;
+            if(cmp.compare(curr.value, pivot.value) > 0){
+                tmp.next = new_last.next;
+                new_last.next.previous = tmp;
+                tmp.previous = new_last;
+                new_last.next = tmp;
+                new_last = tmp;
+            } else {
+                if (pivot == new_first)
+                    new_first = tmp;
+                pivot.previous.next = tmp;
+                tmp.previous = pivot.previous;
+                pivot.previous = tmp;
+                tmp.next = pivot;
+            }
+            curr = curr.next;
+        }
+        if (new_first != pivot && new_first.next != pivot)
+            quicksort(new_first, pivot.previous, cmp);
+        first.value = new_first.value;
+        first.next = new_first.next;
+        first.previous = null;
+        if (new_last != pivot && new_last.previous != pivot)
+            quicksort(pivot.next, new_last, cmp);
+        last.value = new_last.value;
+        last.previous = new_last.previous;
+        last.next = null;
+    }
+
+    public static <E> void quicksort_(Node<E> first, Node<E> last, Comparator<E> cmp) {
         //Terminal Condition
         if (last != null && first != last && first != last.next) {
             //Variable that stores the node of the pivot after the swaps
