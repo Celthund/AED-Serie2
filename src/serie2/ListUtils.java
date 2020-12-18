@@ -45,47 +45,8 @@ public class ListUtils {
             quicksort_with_pointers(pivot.next, last, cmp);
     }
 
-    public static <E> void quicksort(Node<E> first, Node<E> last, Comparator<E> cmp){
-        String a = "AB";
-        String b = "BA";
-        if (first == last.next || first == last) return;
-        Node<E> pivot, new_first, new_last, curr = first, tmp;
-        pivot = new_first = new_last = new Node<>();
-        pivot.value = last.value;
-        pivot.next = pivot;
-        pivot.previous = pivot;
-        while (curr != last){
-            tmp = new Node<>();
-            tmp.value = curr.value;
-            if(cmp.compare(curr.value, pivot.value) > 0){
-                tmp.next = new_last.next;
-                new_last.next.previous = tmp;
-                tmp.previous = new_last;
-                new_last.next = tmp;
-                new_last = tmp;
-            } else {
-                if (pivot == new_first)
-                    new_first = tmp;
-                pivot.previous.next = tmp;
-                tmp.previous = pivot.previous;
-                pivot.previous = tmp;
-                tmp.next = pivot;
-            }
-            curr = curr.next;
-        }
-        if (new_first != pivot && new_first.next != pivot)
-            quicksort(new_first, pivot.previous, cmp);
-        first.value = new_first.value;
-        first.next = new_first.next;
-        first.previous = null;
-        if (new_last != pivot && new_last.previous != pivot)
-            quicksort(pivot.next, new_last, cmp);
-        last.value = new_last.value;
-        last.previous = new_last.previous;
-        last.next = null;
-    }
 
-    public static <E> void quicksort_(Node<E> first, Node<E> last, Comparator<E> cmp) {
+    public static <E> void quicksort(Node<E> first, Node<E> last, Comparator<E> cmp) {
         //Terminal Condition
         if (last != null && first != last && first != last.next) {
             //Variable that stores the node of the pivot after the swaps
@@ -142,7 +103,7 @@ public class ListUtils {
     }
 
     public static <E> Node<E> merge(Node<E>[] lists, Comparator<E> cmp) {
-        Node<E> res = new Node<E>(), last = res;
+        Node<E> res = new Node<E>();
         int nullCounter = 0, i = 0, smallestIdx = 0;
 
         res.next = res.previous = res;
@@ -150,26 +111,18 @@ public class ListUtils {
         while (nullCounter < lists.length) {
             if (i >= lists.length) {
                 i = 0;
-
                 Node <E> tmp = lists[smallestIdx];
 
                 if(tmp != null) {
-                    lists[smallestIdx] = (lists[smallestIdx].next == null) ? null : lists[smallestIdx].next;
-
-                    if (tmp.next != null)
-                        tmp.next.previous = tmp.previous;
-
+                    lists[smallestIdx] = lists[smallestIdx].next;
+                    tmp.previous = res.previous;
+                    res.previous.next = tmp;
                     res.previous = tmp;
                     tmp.next = res;
-                    tmp.previous = last;
-                    last.next = tmp;
-                    last = tmp;
                 }
             }
-
             if (lists[i] == null)
                 nullCounter++;
-
             else {
                 nullCounter = 0;
                 if (lists[smallestIdx] == null || cmp.compare(lists[smallestIdx].value, lists[i].value) > 0)
