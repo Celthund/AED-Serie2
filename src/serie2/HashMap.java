@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import static java.lang.Math.abs;
 
+// LinkedList class
 class HashNode <K, V> {
     K key;
     V value;
