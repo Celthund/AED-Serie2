@@ -66,25 +66,41 @@ public class OurProcessPointsColections {
             System.exit(-2);
         }
 
-        HashMap<Point, Integer> hashmap = new HashMap<>();
+        HashMap<Point, Integer> hashmap = null;
+        int initial_size;
         //Switch case to know which tasks the user wants to do
         switch (operation) {
             case "union":
-                //Calls the get() method to show the k words that occur more times
+                // Since we only want the unique nodes lets consider that only half of the file have unique nodes.
+                // and when needed increase the hashmap by half of this initial size.
+                initial_size = (NodesOnFile(scanner1) + NodesOnFile(scanner2)) / 2;
+                hashmap = new HashMap<>(initial_size);
                 FileToHashMap(hashmap, scanner1);
                 FileToHashMap(hashmap, scanner2);
                 break;
             case "difference":
-                //Calls the sort() method that orders by alphabetic order the k words
-                //that occur more times
+                // Since we only want the unique nodes lets consider that only half of the file have unique nodes.
+                // and when needed increase the hashmap by half of this initial size.
+                initial_size = NodesOnFile(scanner1) / 2;
+                hashmap = new HashMap<>(initial_size);
                 FileToHashMap(hashmap, scanner1);
                 difference(hashmap, scanner2);
                 break;
             case "intersection":
-                //Calls the sort() method that orders by alphabetic order the k words
-                //that occur more times
-                FileToHashMap(hashmap, scanner1);
-                hashmap = intersection(hashmap, scanner2);
+                // Since we only want the unique nodes lets consider that only half of the file have unique nodes.
+                // and when needed increase the hashmap by half of this initial size.
+                int tmp1 = NodesOnFile(scanner1), tmp2 = NodesOnFile(scanner2);
+                if (tmp1 < tmp2){
+                    initial_size = tmp1 ;
+                    hashmap = new HashMap<>(initial_size);
+                    FileToHashMap(hashmap, scanner1);
+                    hashmap = intersection(hashmap, scanner2);
+                } else {
+                    initial_size = tmp2  ;
+                    hashmap = new HashMap<>(initial_size);
+                    FileToHashMap(hashmap, scanner2);
+                    hashmap = intersection(hashmap, scanner1);
+                }
                 break;
             default:
                 System.out.println("No valid operation.");
@@ -104,9 +120,24 @@ public class OurProcessPointsColections {
 
     }
 
+    private static int NodesOnFile(Scanner scanner) {
+        String[] curr;
+        while (scanner.hasNextLine()) {
+            // v 1 -73530767 41085396
+            curr = scanner.nextLine().split(" ");
+            if (!curr[0].equals("p")) {
+                continue;
+            }
+            //p aux sp co 264346
+            return Integer.parseInt(curr[4]);
+            //c graph contains 264346 nodes
+        }
+        return 0;
+    }
+
     private static HashMap<Point, Integer> intersection(HashMap<Point, Integer> hashmap, Scanner scanner) {
         String[] curr;
-        HashMap<Point, Integer> tmp = new HashMap<>();
+        HashMap<Point, Integer> tmp = new HashMap<>(hashmap.size());
         while (scanner.hasNextLine()) {
             // v 1 -73530767 41085396
             curr = scanner.nextLine().split(" ");
@@ -162,6 +193,7 @@ public class OurProcessPointsColections {
         //c graph contains 264346 nodes
         //c
         //v 1 -73530767 41085396
+        if (hashmap == null) return;
         out.println("c 9th Implementation Challenge: Shortest Paths");
         out.println("c");
         out.printf("p aux sp co %d\n", hashmap.size());

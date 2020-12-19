@@ -82,10 +82,14 @@ public class ProcessPointsColections {
                 difference(hashmap, scanner2);
                 break;
             case "intersection":
-                //Calls the sort() method that orders by alphabetic order the k words
-                //that occur more times
-                FileToHashMap(hashmap, scanner1);
-                hashmap = intersection(hashmap, scanner2);
+                int tmp1 = NodesOnFile(scanner1), tmp2 = NodesOnFile(scanner2);
+                if (tmp1 < tmp2){ ;
+                    FileToHashMap(hashmap, scanner1);
+                    hashmap = intersection(hashmap, scanner2);
+                } else {
+                    FileToHashMap(hashmap, scanner2);
+                    hashmap = intersection(hashmap, scanner1);
+                }
                 break;
             default:
                 System.out.println("No valid operation.");
@@ -103,6 +107,21 @@ public class ProcessPointsColections {
         System.out.printf("%.2f\n", end_time - start_time);
         HashMap<Point, Point> map = new HashMap<>();
 
+    }
+
+    private static int NodesOnFile(Scanner scanner) {
+        String[] curr;
+        while (scanner.hasNextLine()) {
+            // v 1 -73530767 41085396
+            curr = scanner.nextLine().split(" ");
+            if (!curr[0].equals("p")) {
+                continue;
+            }
+            //p aux sp co 264346
+            return Integer.parseInt(curr[4]);
+            //c graph contains 264346 nodes
+        }
+        return 0;
     }
 
     private static HashMap<Point, Integer> intersection(HashMap<Point, Integer> hashmap, Scanner scanner) {

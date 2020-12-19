@@ -38,10 +38,19 @@ class HashNode <K, V> {
 public class HashMap <K, V> implements Iterable<HashNode<K, V>> {
 
     HashNode<K, V>[] hashmap;
-    int initial_size = 100, size = 0, dim = initial_size;
+    final static int DEFAULT_INITIAL_SIZE = 100;
+    int initial_size, size = 0, dim;
 
     HashMap(){
+        initial_size = DEFAULT_INITIAL_SIZE;
+        dim = initial_size;
         hashmap = new HashNode[initial_size];
+    }
+
+    HashMap(int initial_size){
+        this.initial_size = initial_size;
+        dim = this.initial_size;
+        hashmap = new HashNode[this.initial_size];
     }
 
     private int hash(K key){
@@ -85,17 +94,20 @@ public class HashMap <K, V> implements Iterable<HashNode<K, V>> {
 
     private void increaseSizeIfNeeded() {
         if ((float)size / dim <= 1.33) return;
-        int pos, dim = this.dim + initial_size;
+        int pos, dim = this.dim + (int)(initial_size / 0.5);
         HashNode<K, V>[] hashmap = new HashNode[dim];
-
         Iterator<HashNode<K, V>> iter = iterator();
-        HashNode<K, V> node;
+        HashNode<K, V> curr, tmp;
+        int i = 0;
         while (iter.hasNext()){
-            node = iter.next();
-            pos = hash(node.key, dim);
-            node.next = hashmap[pos];
-            hashmap[pos] = node;
+            i++;
+            curr = iter.next();
+            pos = hash(curr.key, dim);
+            tmp = new HashNode<>(curr.getKey(), curr.getValue());
+            tmp.next = hashmap[pos];
+            hashmap[pos] = tmp;
         }
+        this.dim = dim;
         this.hashmap = hashmap;
     }
 
