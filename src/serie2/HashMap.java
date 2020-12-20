@@ -128,9 +128,7 @@ public class HashMap <K, V> implements Iterable<HashNode<K, V>> {
         // Iterator to put all the keys on to the new positions
         Iterator<HashNode<K, V>> iter = iterator();
         HashNode<K, V> curr, tmp;
-        int i = 0;
         while (iter.hasNext()){
-            i++;
             curr = iter.next();
             pos = hash(curr.key, dim);
             tmp = new HashNode<>(curr.getKey(), curr.getValue());
